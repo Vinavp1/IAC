@@ -29,7 +29,6 @@ pipeline {
             steps {
                 script {
                         bat "sam build"
-                        bat "sam package  --output-template-file template.yaml"
                 }
             }
         }
