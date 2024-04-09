@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools{
-        python 'Python'
-    }
-
     parameters {
         choice(name: 'DEPLOY_STAGE', choices: ['staging', 'production'], description: 'Select the deployment stage')
         string(name: 'ARTIFACTS_BUCKET', defaultValue: 'cradlewise-artifacts-bucket', description: 'Enter the S3 bucket for artifacts')
