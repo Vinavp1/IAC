@@ -4,16 +4,17 @@ Transform: AWS::Serverless-2016-10-31
 Globals:
   Function:
     Runtime: python3.8
-    Timeout: !ImportValue Timeout
+    Timeout: 30
 
 Resources:
   CredlewiseLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !ImportValue FunctionName
-      Handler: !ImportValue Handler
-      CodeUri: python/
+      FunctionName: Credlewise-Lambda-Function-SAM
+      Handler: hellopy-sam.lambda_handler
+      CodeUri: aws-sam/python
       Description: Lambda SAM function for Credlewise
+      VersionDescription: '1.0'
       Policies:
         - AWSLambdaBasicExecutionRole
       Events:
@@ -33,7 +34,7 @@ Resources:
     Properties:
       FunctionName: !Ref CredlewiseLambdaFunction
       FunctionVersion: !GetAtt CredlewiseLambdaVersion.Version
-      Name: !ImportValue Alias
+      Name: Prod
 
 Outputs:
   ApiGatewayInvokeURL:
