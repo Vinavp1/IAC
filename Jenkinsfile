@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     dir ('aws-sam/python') {
-                        bat 'python -m unittest hellopy-sam-unittest.py'
+                        bat 'python -m unittest hellopy_sam_unittest.py'
                     }
                 }
             }
@@ -30,7 +30,7 @@ pipeline {
                 script {
 					dir ('aws-sam/python') {
                         bat "sam build"
-                        bat "sam package --s3-bucket ${params.ARTIFACTS_BUCKET} --s3-prefix ${params.ARTIFACTS_PREFIX} --output-template-file template.yml"
+                        bat "sam package --s3-bucket ${params.ARTIFACTS_BUCKET} --s3-prefix ${params.ARTIFACTS_PREFIX} --output-template-file template.yaml"
 					}
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                        bat "sam deploy --template-file template.yml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} --capabilities CAPABILITY_IAM"
+                        bat "sam deploy --template-file template.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} --capabilities CAPABILITY_IAM"
                 }
             }
         }
