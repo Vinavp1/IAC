@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools{
-        Python 'Python'
+        python 'Python'
     }
 
     parameters {
