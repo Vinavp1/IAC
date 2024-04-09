@@ -28,10 +28,8 @@ pipeline {
         stage('Package Application') {
             steps {
                 script {
-					dir ('aws-sam/python') {
                         bat "sam build"
                         bat "sam package --s3-bucket ${params.ARTIFACTS_BUCKET} --s3-prefix ${params.ARTIFACTS_PREFIX} --output-template-file template.yaml"
-					}
                 }
             }
         }
