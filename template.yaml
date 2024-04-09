@@ -1,40 +1,71 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  Stage:
+    Type: String
+    Description: Stage to deploy resources to
+    AllowedValues:
+      - staging
+      - production
+  LambdaFun:
+    Type: String
+    Description: Stage to deploy resources to
+    AllowedValues:
+      - Credlewise-Lambda-Function-SAM
+      - Credlewise-Lambda-Function-SAM-New
+  LambdaHand:
+    Type: String
+    Description: Stage to deploy resources to
+    AllowedValues:
+      - hellopy-sam.lambda_handler
+      - hellopy-sam.lambda_handler_new
+  Version:
+    Type: String
+    Description: The version of the Lambda function
+    AllowedValues:
+      - v1
+      - v2
+
 Globals:
   Function:
     Runtime: python3.8
     Timeout: 30
+    Tags:
+      project: my-project
+      environment: !Ref Stage
 
 Resources:
   CredlewiseLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: Credlewise-Lambda-Function-SAM
-      Handler: hellopy-sam.lambda_handler
+      FunctionName: !Ref LambdaFun
+      Handler: !Ref LambdaHand
       CodeUri: aws-sam/python
       Description: Lambda SAM function for Credlewise
-      VersionDescription: '1.0'
       Policies:
         - AWSLambdaBasicExecutionRole
       Events:
         GatewayEvent:
           Type: Api
+          
           Properties:
             Path: /test1
             Method: POST
+            
 
   CredlewiseLambdaVersion:
     Type: AWS::Lambda::Version
     Properties:
       FunctionName: !Ref CredlewiseLambdaFunction
+      Description: !Ref Version
 
   CredlewiseLambdaAlias:
     Type: AWS::Lambda::Alias
     Properties:
       FunctionName: !Ref CredlewiseLambdaFunction
       FunctionVersion: !GetAtt CredlewiseLambdaVersion.Version
-      Name: Prod
+      Name: !Ref Stage
 
 Outputs:
   ApiGatewayInvokeURL:
