@@ -5,23 +5,27 @@ Parameters:
   Stage:
     Type: String
     Description: Stage to deploy resources to
+    Default: staging
     AllowedValues:
       - staging
       - production
   LambdaFun:
     Type: String
     Description: Stage to deploy resources to
+    Default: Credlewise-Lambda-Function-SAM
     AllowedValues:
       - Credlewise-Lambda-Function-SAM
       - Credlewise-Lambda-Function-SAM-New
   LambdaHand:
     Type: String
     Description: Stage to deploy resources to
+    Default: hellopy-sam.lambda_handler
     AllowedValues:
       - hellopy-sam.lambda_handler
       - hellopy-sam.lambda_handler_new
   Version:
     Type: String
+    Default: v1
     Description: The version of the Lambda function
     AllowedValues:
       - v1
