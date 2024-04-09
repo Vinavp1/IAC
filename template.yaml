@@ -19,10 +19,10 @@ Parameters:
   LambdaHand:
     Type: String
     Description: Stage to deploy resources to
-    Default: hellopy-sam.lambda_handler
+    Default: hellopy_sam.lambda_handler
     AllowedValues:
-      - hellopy-sam.lambda_handler
-      - hellopy-sam.lambda_handler_new
+      - hellopy_sam.lambda_handler
+      - hellopy_sam.lambda_handler_new
   Version:
     Type: String
     Default: v1

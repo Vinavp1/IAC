@@ -1,7 +1,7 @@
 
 import unittest
 import json
-from hellopy import lambda_handler  
+from hellopy_sam import lambda_handler
 
 class TestLambdaHandler(unittest.TestCase):
     def test_lambda_handler(self):
