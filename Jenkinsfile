@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                         bat "sam build"
-                        bat "sam package --s3-bucket ${params.ARTIFACTS_BUCKET} --s3-prefix ${params.ARTIFACTS_PREFIX} --output-template-file template.yaml"
+                        bat "sam package  --output-template-file template.yaml"
                 }
             }
         }
