@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Runtime: python3.8
+    Timeout: !ImportValue Timeout
+
+Resources:
+  CredlewiseLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !ImportValue FunctionName
+      Handler: !ImportValue Handler
+      CodeUri: python/
+      Description: Lambda SAM function for Credlewise
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        GatewayEvent:
+          Type: Api
+          Properties:
+            Path: /test1
+            Method: POST
+
+  CredlewiseLambdaVersion:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref CredlewiseLambdaFunction
+
+  CredlewiseLambdaAlias:
+    Type: AWS::Lambda::Alias
+    Properties:
+      FunctionName: !Ref CredlewiseLambdaFunction
+      FunctionVersion: !GetAtt CredlewiseLambdaVersion.Version
+      Name: !ImportValue Alias
+
+Outputs:
+  ApiGatewayInvokeURL:
+    Description: URL to invoke the API Gateway endpoint
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/test1"
+  CredlewiseLambdaFunction:
+    Description: "SAM cradlewise Lambda Function ARN"
+    Value: !GetAtt CredlewiseLambdaFunction.Arn

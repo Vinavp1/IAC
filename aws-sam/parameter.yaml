@@ -1,0 +1,21 @@
+Parameters:
+  FunctionName:
+    Type: String
+    Default: Credlewise-Lambda-Function-SAM
+    Description: The name of the Lambda function
+  Handler:
+    Type: String
+    Default: hellopy-sam.lambda_handler
+    Description: The handler function of the Lambda
+  Timeout:
+    Type: Number
+    Default: 30
+    Description: The timeout for the Lambda function
+  Version:
+    Type: String
+    Default: '1.0'
+    Description: The version of the Lambda function
+  Alias:
+    Type: String
+    Default: Prod
+    Description: The alias for the Lambda function

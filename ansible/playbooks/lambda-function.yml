@@ -1,0 +1,61 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create Lambda function code zip
+      archive:
+        path: "/home/ubuntu/ansible/python/"
+        dest: "/home/ubuntu/ansible/python/hellopy-ansible.zip"
+        format: zip
+
+    - name: Create Lambda function
+      community.aws.lambda:
+        name: Credlewise-Ansible-Lambda-Function
+        handler: hellopy.lambda_handler
+        runtime: python3.8
+        zip_file: "/home/ubuntu/ansible/python/hellopy-ansible.zip"
+        state: present
+        role: "arn:aws:iam::339712734289:role/terraform_aws_lambda_role"
+      register: lambda_function
+
+    - name: Debug Lambda function ARN
+      debug:
+        var: lambda_function.arn
+
+    # - name: Create API Gateway REST API
+    #   community.aws.apigateway:
+    #     name: testansibleapi
+    #     description: Ansible API Gateway
+    #   register: test_api
+
+    # - name: Create API Gateway resource
+    #   community.aws.apigateway_resource:
+    #     rest_api_id: "{{ test_api.id }}"
+    #     parent_id: "{{ test_api.root_resource_id }}"
+    #     path_part: "test1"
+
+    # - name: Create API Gateway method
+    #   community.aws.apigateway_method:
+    #     rest_api_id: "{{ test_api.id }}"
+    #     resource_id: "{{ gateway_resource.id }}"
+    #     http_method: "POST"
+    #     authorization: "NONE"
+
+    # - name: Create API Gateway integration
+    #   community.aws.apigateway_integration:
+    #     rest_api_id: "{{ test_api.id }}"
+    #     resource_id: "{{ gateway_resource.id }}"
+    #     http_method: "POST"
+    #     integration_http_method: "POST"
+    #     type: "AWS_PROXY"
+    #     uri: "{{ lambda_function.invoke_arn }}"
+
+    # - name: Create API Gateway deployment
+    #   community.aws.apigateway_deployment:
+    #     rest_api_id: "{{ test_api.id }}"
+    #     stage_name: "prod"
+    #   register: gateway_deployment
+
+    # - name: Debug API Gateway invoke URL
+    #   debug:
+    #     var: gateway_deployment.invoke_url
