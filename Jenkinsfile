@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     dir ('aws-sam/python') {
-                        bat 'python -m unittest test_lambda_handler.py'
+                        bat 'python -m unittest hellopy-sam-unittest.py'
                     }
                 }
             }
