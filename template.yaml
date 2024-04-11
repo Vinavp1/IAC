@@ -29,7 +29,7 @@ Globals:
     Runtime: python3.8
     Timeout: 30
     Tags:
-      project: my-project
+      project: Cradlewise
       environment: !Ref Stage
 
 Resources:
@@ -50,6 +50,11 @@ Resources:
           Properties:
             Path: /test1
             Method: POST
+
+  Myv1Api: 
+       Type: AWS::Serverless::Api
+       Properties:
+           StageName: !Ref Stage
 
 Outputs:
   ApiGatewayInvokeURL:
