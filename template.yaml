@@ -40,7 +40,7 @@ Resources:
       Handler: !Ref LambdaHand
       CodeUri: aws-sam/python
       Description: Lambda SAM function for Credlewise
-      AutoPublishAlias: !Sub "${Stage}
+      AutoPublishAlias: !Sub "${Stage}"
       Policies:
         - AWSLambdaBasicExecutionRole
       Events:
