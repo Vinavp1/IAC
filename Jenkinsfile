@@ -29,6 +29,7 @@ pipeline {
             steps {
                 script {
                         bat "sam build"
+                        bat "sam package --s3-bucket ${params.ARTIFACTS_BUCKET} --s3-prefix ${params.ARTIFACTS_PREFIX} --output-template-file template-out.yaml"
                 }
             }
         }
@@ -36,7 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                        bat "sam deploy --guided --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} --capabilities CAPABILITY_IAM"
+                        bat "sam deploy --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} --capabilities CAPABILITY_IAM"
                 }
             }
         }
