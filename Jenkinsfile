@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     parameters {
+        booleanParam(defaultValue: false,description: 'Delete existing Lambda function before deploying?',name: 'DELETE_EXISTING_LAMBDA')
         choice(name: 'DEPLOY_STAGE', choices: ['staging', 'production'], description: 'Select the deployment stage')
         string(name: 'ARTIFACTS_BUCKET', defaultValue: 'cradlewise-artifacts-buck', description: 'Enter the S3 bucket for artifacts')
         string(name: 'ARTIFACTS_PREFIX', defaultValue: 'cradlewise-prefix', description: 'Enter the S3 prefix for artifacts')
@@ -30,6 +31,18 @@ pipeline {
                 script {
                         bat "sam build"
                         bat "sam package --s3-bucket ${params.ARTIFACTS_BUCKET} --s3-prefix ${params.ARTIFACTS_PREFIX} --output-template-file template-out.yaml"
+                }
+            }
+        }
+
+        stage('Delete existing Lambda function') {
+            when {
+                expression { params.DELETE_EXISTING_LAMBDA }
+            }
+            steps {
+                script {
+                    // Delete existing Lambda function if it exists
+                    sh "aws lambda delete-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION || true"
                 }
             }
         }
