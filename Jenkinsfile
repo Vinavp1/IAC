@@ -13,7 +13,7 @@ pipeline {
         STACK_NAME         = "cradlewise-sam-app-${params.DEPLOY_STAGE}"
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-        LAMBDA_FUNCTION_NAME = "Credlewise-Lambda-Function-SAM"
+        LAMBDA_FUNCTION_NAME = "Credlewise-Lambda-Function-SAM-New"
     }
 
     stages {
