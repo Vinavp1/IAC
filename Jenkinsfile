@@ -42,8 +42,11 @@ pipeline {
             }
             steps {
                 script {
+                    def lambdaExists = sh(script: "aws lambda get-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION", returnStatus: true) == 0
                     // Delete existing Lambda function if it exists
-                    bat "aws lambda delete-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION || true"
+                    if (lambdaExists) {
+                        bat "aws lambda delete-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION || true"
+                    }
                 }
             }
         }
