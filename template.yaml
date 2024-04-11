@@ -78,7 +78,7 @@ Resources:
     UpdateReplacePolicy: Retain
     Properties: 
       FunctionName: !Ref CredlewiseLambdaFunction
-      CodeSha256: !If [SetTimestamp, !Ref DeploymentTimestamp, !Ref AWS::NoValue]
+      
   DevelopVersion:
     Condition: SetDevelopAlias
     Type: AWS::Lambda::Version
@@ -86,7 +86,6 @@ Resources:
     UpdateReplacePolicy: Retain
     Properties: 
       FunctionName: !Ref CredlewiseLambdaFunction
-      CodeSha256: !If [SetTimestamp, !Ref DeploymentTimestamp, !Ref AWS::NoValue]
   
   QaAlias:
     Condition: SetQaAlias
@@ -97,6 +96,7 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
       FunctionVersion: !Select [7, !Split [ ":", !Ref QaVersion]]
       Name: QaAlias
+
   DevelopAlias:
     Condition: SetDevelopAlias
     Type: AWS::Lambda::Alias
