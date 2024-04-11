@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        booleanParam(defaultValue: false,description: 'Delete existing Lambda function before deploying?',name: 'DELETE_EXISTING_LAMBDA')
+        booleanParam(defaultValue: true,description: 'Delete existing Lambda function before deploying?',name: 'DELETE_EXISTING_LAMBDA')
         choice(name: 'DEPLOY_STAGE', choices: ['staging', 'production'], description: 'Select the deployment stage')
         string(name: 'ARTIFACTS_BUCKET', defaultValue: 'cradlewise-artifacts-buck', description: 'Enter the S3 bucket for artifacts')
         string(name: 'ARTIFACTS_PREFIX', defaultValue: 'cradlewise-prefix', description: 'Enter the S3 prefix for artifacts')
@@ -13,6 +13,7 @@ pipeline {
         STACK_NAME         = "cradlewise-sam-app-${params.DEPLOY_STAGE}"
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        LAMBDA_FUNCTION_NAME = "Credlewise-Lambda-Function-SAM"
     }
 
     stages {
