@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     // Delete existing Lambda function if it exists
-                    sh "aws lambda delete-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION || true"
+                    bat "aws lambda delete-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION || true"
                 }
             }
         }
