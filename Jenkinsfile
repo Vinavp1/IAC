@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                         echo "Lambda Function Name: $LAMBDA_FUNCTION_NAME"
-                        bat "sam deploy --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} ParameterKey=LambdaFun,ParameterValue=$LAMBDA_FUNCTION_NAME --capabilities CAPABILITY_NAMED_IAM --no-fail-on-empty-changeset --region $AWS_DEFAULT_REGION"
+                        bat "sam deploy --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} ParameterKey=LambdaFun,ParameterValue=$LAMBDA_FUNCTION_NAME --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset --region $AWS_DEFAULT_REGION"
                 }
             }
         }
