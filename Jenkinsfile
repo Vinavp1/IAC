@@ -37,7 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                        bat "sam deploy --confirm-changeset --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} --capabilities CAPABILITY_IAM"
+                        bat "sam deploy --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} --no-fail-on-empty-changeset --region $AWS_DEFAULT_REGION --capabilities CAPABILITY_IAM"
                 }
             }
         }
