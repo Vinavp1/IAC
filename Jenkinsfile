@@ -41,7 +41,7 @@ pipeline {
                 script {
                         bat "aws lambda delete-alias --name DevelopAlias --function-name $LAMBDA_FUNCTION_NAME"
                         echo "Lambda Function Name: $LAMBDA_FUNCTION_NAME"
-                        def timestamp = bat(script: 'date +%s', returnStdout: true).trim()
+                        def timestamp = powershell(returnStdout: true, script: 'Get-Date -UFormat %s')
                         bat "sam deploy --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} ParameterKey=LambdaFun,ParameterValue=$LAMBDA_FUNCTION_NAME ParameterKey=StageAliasName,ParameterValue=${params.DEPLOY_STAGE} ParameterKey=DeploymentTimestamp,ParameterValue=${timestamp} --capabilities CAPABILITY_IAM --no-confirm-changeset --no-fail-on-empty-changeset --region $AWS_DEFAULT_REGION"
                         bat "sam deploy --template-file template-out.yaml --stack-name $STACK_NAME --parameter-overrides ParameterKey=Stage,ParameterValue=${params.DEPLOY_STAGE} ParameterKey=LambdaFun,ParameterValue=$LAMBDA_FUNCTION_NAME ParameterKey=StageAliasName,ParameterValue=no-alias ParameterKey=DeploymentTimestamp,ParameterValue=${timestamp} --capabilities CAPABILITY_IAM --no-confirm-changeset --no-fail-on-empty-changeset --region $AWS_DEFAULT_REGION"
                 }
