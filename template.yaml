@@ -39,6 +39,7 @@ Parameters:
 Conditions: 
   SetQaAlias: !Equals [ !Ref StageAliasName, 'staging' ]
   SetDevelopAlias: !Equals [ !Ref StageAliasName, 'production' ]
+  SetTimestamp: !Not [!Equals [!Ref DeploymentTimestamp, '']]
 
 Globals:
   Function:
