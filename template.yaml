@@ -12,7 +12,7 @@ Parameters:
   LambdaFun:
     Type: String
     Description: Stage to deploy resources to
-    Default: Credlewise-Lambda-Function-SAM-New
+    Default: Credlewise-Lambda-Function-SAM-staging
     AllowedValues:
       - Credlewise-Lambda-Function-SAM-staging
       - Credlewise-Lambda-Function-SAM-production
