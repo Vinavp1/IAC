@@ -36,21 +36,6 @@ pipeline {
             }
         }
 
-        stage('Delete existing Lambda function') {
-            when {
-                expression { params.DELETE_EXISTING_LAMBDA }
-            }
-            steps {
-                script {
-                    def lambdaExists = bat(script: "aws lambda get-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION", returnStatus: true) == 0
-                    // Delete existing Lambda function if it exists
-                    if (lambdaExists) {
-                        bat "aws lambda delete-function --function-name $LAMBDA_FUNCTION_NAME --region $AWS_DEFAULT_REGION || true"
-                    }
-                }
-            }
-        }
-
         stage('Deploy') {
             steps {
                 script {
