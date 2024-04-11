@@ -51,11 +51,6 @@ Resources:
             Path: /test1
             Method: POST
 
-  Myv1Api: 
-       Type: AWS::Serverless::Api
-       Properties:
-           StageName: !Ref Stage
-
 Outputs:
   ApiGatewayInvokeURL:
     Description: URL to invoke the API Gateway endpoint
