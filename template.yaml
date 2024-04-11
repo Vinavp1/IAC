@@ -36,6 +36,36 @@ Conditions:
   SetQaAlias: !Equals [ !Ref StageAliasName, 'staging' ]
   SetDevelopAlias: !Equals [ !Ref StageAliasName, 'production' ]
 
+Globals:
+  Function:
+    Runtime: python3.8
+    Timeout: 30
+    Tags:
+      project: Cradlewise
+      environment: !Ref Stage
+
+Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+  CredlewiseLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref LambdaFun
+      Handler: !Ref LambdaHand
+      CodeUri: aws-sam/python
+      Description: Lambda SAM function for Credlewise
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        GatewayEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /test1
+            Method: POST
+
   QaVersion:
     Condition: SetQaAlias
     Type: AWS::Lambda::Version
@@ -70,35 +100,6 @@ Conditions:
       FunctionVersion: !Select [7, !Split [ ":", !Ref DevelopVersion]]
       Name: DevelopAlias
 
-Globals:
-  Function:
-    Runtime: python3.8
-    Timeout: 30
-    Tags:
-      project: Cradlewise
-      environment: !Ref Stage
-
-Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: !Ref Stage
-  CredlewiseLambdaFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Ref LambdaFun
-      Handler: !Ref LambdaHand
-      CodeUri: aws-sam/python
-      Description: Lambda SAM function for Credlewise
-      Policies:
-        - AWSLambdaBasicExecutionRole
-      Events:
-        GatewayEvent:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGatewayApi
-            Path: /test1
-            Method: POST
 
 Outputs:
   ApiGatewayInvokeURL:
