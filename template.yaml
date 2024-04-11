@@ -58,7 +58,7 @@ Resources:
 Outputs:
   ApiGatewayInvokeURL:
     Description: URL to invoke the API Gateway endpoint
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/test1"
+    Value: !Sub "https://${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/test1"
   CredlewiseLambdaFunction:
     Description: "SAM cradlewise Lambda Function ARN"
     Value: !GetAtt CredlewiseLambdaFunction.Arn
