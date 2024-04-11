@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         choice(name: 'DEPLOY_STAGE', choices: ['staging', 'production'], description: 'Select the deployment stage')
-        string(name: 'ARTIFACTS_BUCKET', defaultValue: 'cradlewise-artifacts-buck', description: 'Enter the S3 bucket for artifacts')
+        string(name: 'ARTIFACTS_BUCKET', defaultValue: 'cradlewise-artifacts-bucket', description: 'Enter the S3 bucket for artifacts')
         string(name: 'ARTIFACTS_PREFIX', defaultValue: 'cradlewise-prefix', description: 'Enter the S3 prefix for artifacts')
     }
 
