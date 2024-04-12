@@ -102,13 +102,13 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
       FunctionVersion: !Select [7, !Split [ ":", !Ref DevelopVersion]]
       Name: DevelopAlias
-      
+
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
       Variables:
-        LambdaAlias: !Ref QaAlias
+      LambdaAlias: !Ref QaAlias
       DefinitionBody:
         swagger: "2.0"
         info:
