@@ -71,41 +71,6 @@ Resources:
             Path: /test1
             Method: POST
 
-  QaVersion:
-    Condition: SetQaAlias
-    Type: AWS::Lambda::Version
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties: 
-      FunctionName: !Ref CredlewiseLambdaFunction
-      
-  DevelopVersion:
-    Condition: SetDevelopAlias
-    Type: AWS::Lambda::Version
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties: 
-      FunctionName: !Ref CredlewiseLambdaFunction
-  
-  QaAlias:
-    Condition: SetQaAlias
-    Type: AWS::Lambda::Alias
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties: 
-      FunctionName: !Ref CredlewiseLambdaFunction
-      FunctionVersion: !Select [7, !Split [ ":", !Ref QaVersion]]
-      Name: QaAlias
-
-  DevelopAlias:
-    Condition: SetDevelopAlias
-    Type: AWS::Lambda::Alias
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties: 
-      FunctionName: !Ref CredlewiseLambdaFunction
-      FunctionVersion: !Select [7, !Split [ ":", !Ref DevelopVersion]]
-      Name: DevelopAlias
 
 
 Outputs:
