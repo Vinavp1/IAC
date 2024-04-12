@@ -38,7 +38,7 @@ Parameters:
   StageVariables:
     Type: String
     Description: Stage variables for API Gateway in JSON format (e.g., '{"lambdaAlias":"dev"}')
-
+    Default: '{"lambdaAlias":"dev"}'
 
 Conditions: 
   SetStageAlias: !Equals [ !Ref StageAliasName, 'staging' ]
