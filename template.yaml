@@ -111,7 +111,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-      StageVariables: !Ref StageVariables
+      StageVariables: '{"lambdaAlias":"dev"}'
 
   ApiGatewayIntegration:
     Type: AWS::Serverless::ApiGateway::Integration
