@@ -42,11 +42,11 @@ pipeline {
                             def lambdaFunctionName = bat(script: "echo $LAMBDA_FUNCTION_NAME", returnStdout: true).trim()
                             def aliasNameDev = 'DevelopAlias'
                             def aliasNameQa = 'QaAlias'
-                            def aliasExistsDev = bat(script: "aws lambda get-alias --name $aliasName --function-name $LAMBDA_FUNCTION_NAME", returnStatus: true)
+                            def aliasExistsDev = bat(script: "aws lambda get-alias --name $aliasNameDev --function-name $LAMBDA_FUNCTION_NAME", returnStatus: true)
                             
                             if (aliasExistsDev == 0) {
-                                bat "aws lambda delete-alias --name $aliasName --function-name $LAMBDA_FUNCTION_NAME"
-                                echo "Deleted alias $aliasName for Lambda function $LAMBDA_FUNCTION_NAME"
+                                bat "aws lambda delete-alias --name $aliasNameDev --function-name $LAMBDA_FUNCTION_NAME"
+                                echo "Deleted alias $aliasNameDev for Lambda function $LAMBDA_FUNCTION_NAME"
                             } else {
                                 def aliasExistsQa = bat(script: "aws lambda get-alias --name $aliasNameQa --function-name $LAMBDA_FUNCTION_NAME", returnStatus: true)
                                 if (aliasExistsQa == 0) {
