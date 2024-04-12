@@ -50,22 +50,6 @@ Globals:
       environment: !Ref Stage
 
 Resources:
-  CredlewiseLambdaFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Ref LambdaFun
-      Handler: !Ref LambdaHand
-      CodeUri: aws-sam/python
-      Description: Lambda SAM function for Credlewise
-      Policies:
-        - AWSLambdaBasicExecutionRole
-      Events:
-        GatewayEvent:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGatewayApi
-            Path: /test1
-            Method: POST
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -83,6 +67,22 @@ Resources:
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}:${LambdaAlias}/invocations"
               responses: {}
+  CredlewiseLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref LambdaFun
+      Handler: !Ref LambdaHand
+      CodeUri: aws-sam/python
+      Description: Lambda SAM function for Credlewise
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        GatewayEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /test1
+            Method: POST
 
   QaVersion:
     Condition: SetQaAlias
