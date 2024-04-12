@@ -50,23 +50,6 @@ Globals:
       environment: !Ref Stage
 
 Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: !Ref Stage
-      Variables:
-        LambdaAlias: 'staging'
-      DefinitionBody:
-        swagger: "2.0"
-        info:
-          title: "My API"
-          version: "1.0"
-        paths:
-          /myendpoint:
-            get:
-              x-amazon-apigateway-integration:
-                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}:${LambdaAlias}/invocations"
-              responses: {}
   CredlewiseLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -119,7 +102,24 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
       FunctionVersion: !Select [7, !Split [ ":", !Ref DevelopVersion]]
       Name: DevelopAlias
-
+      
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+      Variables:
+        LambdaAlias: !Ref QaAlias
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          title: "My API"
+          version: "1.0"
+        paths:
+          /myendpoint:
+            get:
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}:${LambdaAlias}/invocations"
+              responses: {}
 
 Outputs:
   ApiGatewayInvokeURL:
