@@ -55,7 +55,7 @@ Resources:
     Properties:
       StageName: !Ref Stage
       Variables:
-        LambdaAlias: !Ref Stage
+        LambdaAlias: !If [SetQaAlias, !Ref QaAlias, !Ref DevelopAlias]
       DefinitionBody:
         swagger: "2.0"
         info:
