@@ -111,7 +111,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-      StageVariables: '{"lambdaAlias":"dev"}'
+      Variables: !Sub ${StageVariables}
 
   ApiGatewayIntegration:
     Type: AWS::Serverless::ApiGateway::Integration
@@ -120,7 +120,7 @@ Resources:
       IntegrationHttpMethod: 'POST' # Update method based on your API requirement
       IntegrationType: AWS_PROXY
       # Use stage variable to construct Lambda function ARN
-      Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}/${!StageVariables:lambdaAlias}/invocations
+      Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}/${StageVariables:lambdaAlias}/invocations
       Credentials: !GetAtt CredlewiseLambdaFunction.Arn
   
   ApiGatewayMethod:
