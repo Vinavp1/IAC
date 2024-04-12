@@ -107,8 +107,6 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-      Variables:
-        LambdaAlias: !Ref QaAlias
       DefinitionBody:
         swagger: "2.0"
         info:
@@ -120,6 +118,9 @@ Resources:
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}:${LambdaAlias}/invocations"
               responses: {}
+
+    Variables:
+      LambdaAlias: !If [SetStageAlias, !Ref QaAlias, !Ref DevelopAlias]
 
 Outputs:
   ApiGatewayInvokeURL:
