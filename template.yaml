@@ -35,14 +35,10 @@ Parameters:
     Type: String
     Description: Timestamp to force Lambda version update
     Default: ''
-  StageVariables:
-    Type: String
-    Description: Stage variables for API Gateway in JSON format (e.g., '{"lambdaAlias":"dev"}')
-    Default: '{"lambdaAlias":"dev"}'
 
 Conditions: 
-  SetStageAlias: !Equals [ !Ref StageAliasName, 'staging' ]
-  SetProductionAlias: !Equals [ !Ref StageAliasName, 'production' ]
+  SetQaAlias: !Equals [ !Ref StageAliasName, 'staging' ]
+  SetDevelopAlias: !Equals [ !Ref StageAliasName, 'production' ]
   SetTimestamp: !Not [!Equals [!Ref DeploymentTimestamp, '']]
 
 Globals:
@@ -54,6 +50,10 @@ Globals:
       environment: !Ref Stage
 
 Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
   CredlewiseLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -72,7 +72,7 @@ Resources:
             Method: POST
 
   QaVersion:
-    Condition: SetStageAlias
+    Condition: SetQaAlias
     Type: AWS::Lambda::Version
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -80,7 +80,7 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
       
   DevelopVersion:
-    Condition: SetProductionAlias
+    Condition: SetDevelopAlias
     Type: AWS::Lambda::Version
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -88,7 +88,7 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
   
   QaAlias:
-    Condition: SetStageAlias
+    Condition: SetQaAlias
     Type: AWS::Lambda::Alias
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -98,7 +98,7 @@ Resources:
       Name: QaAlias
 
   DevelopAlias:
-    Condition: SetProductionAlias
+    Condition: SetDevelopAlias
     Type: AWS::Lambda::Alias
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -106,30 +106,7 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
       FunctionVersion: !Select [7, !Split [ ":", !Ref DevelopVersion]]
       Name: DevelopAlias
-      
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: !Ref Stage
-      Variables: !Sub ${StageVariables}
 
-  ApiGatewayIntegration:
-    Type: AWS::Serverless::ApiGateway::Integration
-    Properties:
-      ApiId: !Ref ApiGatewayApi
-      IntegrationHttpMethod: 'POST' # Update method based on your API requirement
-      IntegrationType: AWS_PROXY
-      # Use stage variable to construct Lambda function ARN
-      Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}/${StageVariables:lambdaAlias}/invocations
-      Credentials: !GetAtt CredlewiseLambdaFunction.Arn
-  
-  ApiGatewayMethod:
-    Type: AWS::Serverless::ApiGateway::Method
-    Properties:
-      RestApiId: !Ref ApiGatewayApi
-      ResourceId: !GetAtt ApiGatewayApi.RootResourceId
-      HttpMethod: !Ref ApiGatewayIntegration.IntegrationHttpMethod
-      IntegrationId: !Ref ApiGatewayIntegration
 
 Outputs:
   ApiGatewayInvokeURL:
@@ -138,6 +115,3 @@ Outputs:
   CredlewiseLambdaFunction:
     Description: "SAM cradlewise Lambda Function ARN"
     Value: !GetAtt CredlewiseLambdaFunction.Arn
-  ApiUrl:
-    Description: URL of the deployed API (based on chosen alias)
-    Value: !Sub https://${ApiGatewayApi.ApiEndpoint}/${Stage}
