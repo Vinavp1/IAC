@@ -50,24 +50,6 @@ Globals:
       environment: !Ref Stage
 
 Resources:
-  ApiGatewayApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: !Ref Stage
-      Variables:
-        LambdaAlias: !If [SetQaAlias, !Ref QaAlias, !Ref DevelopAlias]
-      DefinitionBody:
-        swagger: "2.0"
-        info:
-          title: "My API"
-          version: "1.0"
-        paths:
-          /myendpoint:
-            get:
-              # Define integration settings here
-              x-amazon-apigateway-integration:
-                uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${stageVariables.LambdaAlias}/invocations"
-              responses: {}
   CredlewiseLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -84,6 +66,23 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /test1
             Method: POST
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+      Variables:
+        LambdaAlias: !If [SetQaAlias, !Ref QaAlias, !Ref DevelopAlias]
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          title: "My API"
+          version: "1.0"
+        paths:
+          /myendpoint:
+            get:
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CredlewiseLambdaFunction.Arn}:${LambdaAlias}/invocations"
+              responses: {}
 
   QaVersion:
     Condition: SetQaAlias
