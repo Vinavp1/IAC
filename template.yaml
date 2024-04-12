@@ -54,6 +54,20 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
+      Variables:
+        LambdaAlias: !Ref Stage
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          title: "My API"
+          version: "1.0"
+        paths:
+          /myendpoint:
+            get:
+              # Define integration settings here
+              x-amazon-apigateway-integration:
+                uri: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${stageVariables.LambdaAlias}/invocations"
+              responses: {}
   CredlewiseLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
