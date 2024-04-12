@@ -55,7 +55,7 @@ Resources:
     Properties:
       StageName: !Ref Stage
       Variables:
-        LambdaAlias: !If [SetStageAlias, 'staging', 'production']
+        LambdaAlias: 'staging'
       DefinitionBody:
         swagger: "2.0"
         info:
