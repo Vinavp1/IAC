@@ -37,8 +37,8 @@ Parameters:
     Default: ''
 
 Conditions: 
-  SetQaAlias: !Equals [ !Ref StageAliasName, 'staging' ]
-  SetDevelopAlias: !Equals [ !Ref StageAliasName, 'production' ]
+  SetStageAlias: !Equals [ !Ref StageAliasName, 'staging' ]
+  SetProductionAlias: !Equals [ !Ref StageAliasName, 'production' ]
   SetTimestamp: !Not [!Equals [!Ref DeploymentTimestamp, '']]
 
 Globals:
@@ -55,7 +55,7 @@ Resources:
     Properties:
       StageName: !Ref Stage
       Variables:
-      LambdaAlias: !If [SetQaAlias, !Ref QaAlias, !Ref DevelopAlias]
+        LambdaAlias: !If [SetStageAlias, 'staging', 'production']
       DefinitionBody:
         swagger: "2.0"
         info:
@@ -85,7 +85,7 @@ Resources:
             Method: POST
 
   QaVersion:
-    Condition: SetQaAlias
+    Condition: SetStageAlias
     Type: AWS::Lambda::Version
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -93,7 +93,7 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
       
   DevelopVersion:
-    Condition: SetDevelopAlias
+    Condition: SetProductionAlias
     Type: AWS::Lambda::Version
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -101,7 +101,7 @@ Resources:
       FunctionName: !Ref CredlewiseLambdaFunction
   
   QaAlias:
-    Condition: SetQaAlias
+    Condition: SetStageAlias
     Type: AWS::Lambda::Alias
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
@@ -111,7 +111,7 @@ Resources:
       Name: QaAlias
 
   DevelopAlias:
-    Condition: SetDevelopAlias
+    Condition: SetProductionAlias
     Type: AWS::Lambda::Alias
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
